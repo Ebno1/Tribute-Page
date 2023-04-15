@@ -32,3 +32,13 @@
     background-color: aliceblue;
     border-radius: 3px;
 }
+/*
+.timeline{
+   
+}*/
+.timelineTitle{
+    padding-bottom: 2%;
+}
+li{
+    list-style: none;
+}
