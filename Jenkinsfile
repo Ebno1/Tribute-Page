@@ -7,6 +7,22 @@ pipeline {
                 checkout scm
             }
         }
+    
+    stage('Build Docker image') {
+        steps {
+            docker.withRegistry('https://hub.docker.com', credentialsId: 'dockerHubCredentialsId') {
+                dockerImage = docker.image('tribute-page:latest').build()
+            }
+        }
+    }
+
+    stage('Push Docker image to Docker Hub') {
+        steps {
+            docker.withRegistry('https://hub.docker.com', credentialsId: 'dockerHubCredentialsId') {
+                sh "docker push ${dockerImage.fullName}"
+            }
+        }
+    }
 
     //     stage('Run tests') {
     //         steps {
