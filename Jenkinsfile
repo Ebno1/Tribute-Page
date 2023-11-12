@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    enviroment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub_id')
+    }
+
     stages {
         stage('Checkout SCM') {
             steps {
@@ -8,48 +12,28 @@ pipeline {
             }
         }
     
-    stage('Build Docker image') {
-        steps {
-            docker.withRegistry('https://hub.docker.com', credentialsId: 'dockerHubCredentialsId') {
-                dockerImage = docker.image('tribute-page:latest').build()
+        stage('Build Docker image') {
+            steps {
+                sh 'docker build -t ebno1/tribute-page:latest .'
+                }
+        }
+
+        stage('Login'){
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-    }
 
-    stage('Push Docker image to Docker Hub') {
-        steps {
-            docker.withRegistry('https://hub.docker.com', credentialsId: 'dockerHubCredentialsId') {
-                sh "docker push ${dockerImage.fullName}"
+        stage('Push Docker image to Docker Hub') {
+            steps {
+                sh 'docker push ebno1/tribute-page:latest'
             }
         }
+
     }
-
-    //     stage('Run tests') {
-    //         steps {
-    //             sh 'npm test'
-    //         }
-    //     }
-
-    //     stage('Build Docker image') {
-    //         steps {
-    //             docker build -t my-project-name:latest .
-    //         }
-    //     }
-
-    //     stage('Stage application') {
-    //         steps {
-    //             withKubeConfig(kubeconfig: 'config') {
-    //                 kubectl apply -f staging-deployment.yaml
-    //             }
-    //         }
-    //     }
-
-    //     stage('Deploy to production') {
-    //         steps {
-    //             withKubeConfig(kubeconfig: 'config') {
-    //                 kubectl apply -f production-deployment.yaml
-    //             }
-    //         }
-    //     }
+    post {
+        always {
+            sh 'docker logout'
+        }
     }
 }
