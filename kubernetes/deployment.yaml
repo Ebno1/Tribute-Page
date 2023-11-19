@@ -25,7 +25,7 @@ kind: Deployment
 metadata:
   name: tribute-page-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: tribute-page
@@ -34,8 +34,9 @@ spec:
       labels:
         app: tribute-page
     spec:
+      spec:
       containers:
-      - name: tributeapp
-        image: "ebno1/tribute-page:latest"
-        ports:
-        - containerPort: 3000
+        - name: tributeapp
+          image: ebno1/tribute-page:latest
+          ports:
+            - containerPort: 4040
