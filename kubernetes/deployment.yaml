@@ -38,4 +38,4 @@ spec:
       - name: tributeapp
         image: "ebno1/tribute-page:latest"
         ports:
-        - containerPort: 4040
+        - containerPort: 3000
