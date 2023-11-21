@@ -33,9 +33,20 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // kubernetesDeploy(configs: "deployment.yaml")
-                    sh 'kubectl apply -f deployment.yaml'
+                    kubernetesDeploy(configs: "deploymentservice.yaml")
+                    // sh 'kubectl apply -f deployment.yaml'
                     // sh 'kubectl apply -f kubernetes/service.yaml'
+                }
+            }
+        }
+
+        stage('Deploy to K8s') {
+            steps{
+                script {
+                sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deploymentservice.yaml"
+                sh "cat deploymentservice.yaml"
+                sh "kubectl --kubeconfig=/home/ec2-user/config get pods"
+                sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deploymentservice.yaml"
                 }
             }
         }
