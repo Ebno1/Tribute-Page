@@ -22,10 +22,10 @@ spec:
             requests:
               memory: 256Mi
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
             - name: PORT
-              value: "8080"
+              value: "3000"
 
 ---
 
@@ -38,6 +38,6 @@ spec:
   selector:
     app: tribute-page
   ports:
-  - port: 80
-    targetPort: 8080
-    protocol: TCP
+  - protocol: TCP
+    port: 3000 
+    targetPort: 3000 
