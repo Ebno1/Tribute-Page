@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy to K8s') {
             steps{
                 script {
-                sh "sed -i 's,TEST_IMAGE_NAME,harshmanvar/node-web-app:$BUILD_NUMBER,' deploymentservice.yaml"
+                sh "sed -i 's,TEST_IMAGE_NAME,ebno1/tribute-page:latest,' deploymentservice.yaml"
                 sh "cat deploymentservice.yaml"
                 sh "kubectl --kubeconfig=/home/ec2-user/config get pods"
                 sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deploymentservice.yaml"
