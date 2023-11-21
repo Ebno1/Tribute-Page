@@ -30,23 +30,12 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Kubernetes') {
-        //     steps {
-        //         script {
-        //             kubernetesDeploy(configs: "deploymentservice.yaml")
-        //             // sh 'kubectl apply -f deployment.yaml'
-        //             // sh 'kubectl apply -f kubernetes/service.yaml'
-        //         }
-        //     }
-        // }
-
-        stage('Deploy to K8s') {
-            steps{
+        stage('Deploy to Kubernetes') {
+            steps {
                 script {
-                sh "sed -i 's,TEST_IMAGE_NAME,ebno1/tribute-page:latest,' deploymentservice.yaml"
-                sh "cat deploymentservice.yaml"
-                sh "kubectl --kubeconfig=/home/ec2-user/config get pods"
-                sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deploymentservice.yaml"
+                    kubernetesDeploy(configs: "deploymentservice.yaml")
+                    // sh 'kubectl apply -f deployment.yaml'
+                    // sh 'kubectl apply -f kubernetes/service.yaml'
                 }
             }
         }
