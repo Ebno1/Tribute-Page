@@ -30,15 +30,15 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    kubernetesDeploy(configs: "deploymentservice.yaml")
-                    // sh 'kubectl apply -f deployment.yaml'
-                    // sh 'kubectl apply -f kubernetes/service.yaml'
-                }
-            }
-        }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         script {
+        //             kubernetesDeploy(configs: "deploymentservice.yaml")
+        //             // sh 'kubectl apply -f deployment.yaml'
+        //             // sh 'kubectl apply -f kubernetes/service.yaml'
+        //         }
+        //     }
+        // }
 
         stage('Deploy to K8s') {
             steps{
