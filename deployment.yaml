@@ -1,9 +1,40 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: tribute-page-deployment
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       app: tribute-page
+#   template:
+#     metadata:
+#       labels:
+#         app: tribute-page
+#     spec:
+#       containers:
+#         - name: tributeapp
+#           image: ebno1/tribute-page:latest
+#           resources:
+#             limits:
+#               memory: 512Mi
+#               cpu: "1"
+#             requests:
+#               memory: 256Mi
+#           ports:
+#             - containerPort: 3000
+#           env:
+#             - name: PORT
+#               value: "3000"
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tribute-page-deployment
+  name: deployment #The name of the Kubernetes Deployment to be created in the Kubernetes cluster
+  labels:
+    app: tribute-page
 spec:
-  replicas: 2
+  replicas: 2 #The number of pods to be created in the Kubernetes cluster for the React.js application container
   selector:
     matchLabels:
       app: tribute-page
@@ -13,31 +44,43 @@ spec:
         app: tribute-page
     spec:
       containers:
-        - name: tributeapp
-          image: ebno1/tribute-page:latest
-          resources:
+      - name: Tribute-Page #The name of the react.js application container
+        image: ebno1/tribute-page:latest #The Docker image for building the React.js application container
+        ports:
+        - containerPort: 3000 #The port for the React.js application   container
+        resources:
             limits:
               memory: 512Mi
               cpu: "1"
             requests:
               memory: 256Mi
-          ports:
-            - containerPort: 3000
-          env:
-            - name: PORT
-              value: "3000"
 
 ---
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: tribute-page-deployment
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: tribute-page
+#   ports:
+#   - protocol: TCP
+#     port: 3000 
+#     targetPort: 3000 
+
+
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: tribute-page-deployment
+  name: service #The name of the Kubernetes Service to be created in the Kubernetes cluster
 spec:
-  type: LoadBalancer
   selector:
     app: tribute-page
+  type: LoadBalancer #Type of the Kubernetes Service
   ports:
   - protocol: TCP
-    port: 3000 
-    targetPort: 3000 
+    port: 3000 #Service port
+    targetPort: 3000 #The port for the React.js application container
